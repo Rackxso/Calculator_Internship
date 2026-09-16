@@ -25,28 +25,28 @@ mainContainer.appendChild(calContainer);
 
 //Calculator buttons
 function calcButtons() {
-    const calcBtnElements = ["A/C","*","/","Bck","7","8","9","-","4","5","6","+","1","2","3",".","0","="];
+    const calcBtnElements = ["A/C", "*", "/", "Bck", "7", "8", "9", "-", "4", "5", "6", "+", "1", "2", "3", ".", "0", "="];
     const buttonGrid = document.querySelector(".calGridContainer");
-    
+
     let gridWidth = 400 / 4;
     let gridHeight = 350 / 5;
     let zeroWidth = gridWidth * 2;
 
-    for (let i = 0; i < calcBtnElements.length; i++ ) {
+    for (let i = 0; i < calcBtnElements.length; i++) {
 
         //Button creation
         const btn = document.createElement("button");
 
-            if(["A/C","*","/"].includes(calcBtnElements[i])){
-                btn.classList.add("specOpButton");
+        if (["A/C", "*", "/"].includes(calcBtnElements[i])) {
+            btn.classList.add("specOpButton");
 
-            }else if(["Bck",".","-","=","+"].includes(calcBtnElements[i])) {
-                btn.classList.add("operatorButton");
+        } else if (["Bck", ".", "-", "=", "+"].includes(calcBtnElements[i])) {
+            btn.classList.add("operatorButton");
 
-            }else {
-                btn.classList.add("button");
-            };
-            
+        } else {
+            btn.classList.add("button");
+        };
+
         btn.textContent = calcBtnElements[i];
         btn.dataset.choice = calcBtnElements[i];
 
@@ -54,7 +54,7 @@ function calcButtons() {
         if (calcBtnElements[i] == "0" || calcBtnElements[i] == "=") {
             btn.style.width = `${zeroWidth}px`;
             btn.style.height = `${gridHeight}px`;
-        }else {
+        } else {
             btn.style.width = `${gridWidth}px`;
             btn.style.height = `${gridHeight}px`;
         };
@@ -66,32 +66,33 @@ calcButtons();
 
 
 //Computing functions
-function add(value1, value2){
+function add(value1, value2) {
     return value1 + value2;
 };
 
-function substract(value1, value2){
+function substract(value1, value2) {
     return value1 - value2;
 };
 
-function multiply(value1, value2){
+function multiply(value1, value2) {
     return value1 * value2;
 };
 
-function divide(value1, value2){
+function divide(value1, value2) {
     return value1 / value2;
 };
 
 
+
 //Calculations engine
-function operate(value1, operator, value2){
+function operate(value1, operator, value2) {
     let result = "";
     value1 = parseFloat(value1);
     value2 = parseFloat(value2);
-    
+
     if (operator === "/" && value2 === 0) {
         return "Apocalypse Initiated...";
-    };    
+    };
     if (operator === "+") return add(value1, value2);
     if (operator === "-") return substract(value1, value2);
     if (operator === "*") return multiply(value1, value2);
@@ -107,42 +108,42 @@ function displayOutput() {
     const display = document.querySelector(".display");
     const buttons = document.querySelectorAll("button")
     const OPERATORS = new Set(["+", "-", "*", "/"]);
-    
+
     let currentValue = "0";
     let previousValue = null;
     let operator = null;
     let awaitingNewValue = false;
 
 
-    function calculate(a, op, b){
-            const result = operate(a, op, b);
-            return result;
-        };
+    function calculate(a, op, b) {
+        const result = operate(a, op, b);
+        return result;
+    };
 
 
     function inputDigit(digit) {
-        if(awaitingNewValue){
+        if (awaitingNewValue) {
             currentValue = digit;
             awaitingNewValue = false;
-        }else{
-            currentValue = currentValue === "0"? digit : currentValue = currentValue + digit 
+        } else {
+            currentValue = currentValue === "0" ? digit : currentValue = currentValue + digit
         }
     };
 
 
-    function inputDecimal(){
-        if(awaitingNewValue){
+    function inputDecimal() {
+        if (awaitingNewValue) {
             currentValue = "0.";
             awaitingNewValue = false;
-        }else if(!currentValue.includes(".")) {
-            currentValue += "."; 
+        } else if (!currentValue.includes(".")) {
+            currentValue += ".";
         }
     };
 
 
-    function inputOperator(nextOperator){
-        if(operator && !awaitingNewValue){
-            currentValue = String(calculate(previousValue, operator, currentValue))    
+    function inputOperator(nextOperator) {
+        if (operator && !awaitingNewValue) {
+            currentValue = String(calculate(previousValue, operator, currentValue))
         }
         previousValue = currentValue;
         operator = nextOperator;
@@ -151,16 +152,24 @@ function displayOutput() {
 
 
     function inputEquals() {
-        if(operator && previousValue !== null){
-            currentValue = String(calculate(previousValue, operator, currentValue));    
+        if (operator && previousValue !== null) {
+            currentValue = String(calculate(previousValue, operator, currentValue));
             operator = null;
             previousValue = null;
             awaitingNewValue = true;
         }
     };
-  
 
-    function clearCalculator(){
+    function inputBackspace() {
+        if (awaitingNewValue) {
+            return;
+        }
+        currentValue = currentValue.length > 1 ? currentValue.slice(0, -1) : "0";
+        console.log(currentValue);
+    };
+
+
+    function clearCalculator() {
         currentValue = "0";
         previousValue = null;
         operator = null;
@@ -183,8 +192,9 @@ function displayOutput() {
 
             if (choice === "=") inputEquals();
             else if (choice === "A/C") clearCalculator();
+            else if (choice === "Bck") inputBackspace();
             else if (choice === ".") inputDecimal();
-            else if(OPERATORS.has(choice)) inputOperator(choice);
+            else if (OPERATORS.has(choice)) inputOperator(choice);
             else inputDigit(choice);
 
             updateDisplay();
@@ -192,7 +202,7 @@ function displayOutput() {
         });
     })
 
-    
+
 }
 
 
