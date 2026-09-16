@@ -117,6 +117,9 @@ function displayOutput() {
 
     function calculate(a, op, b) {
         const result = operate(a, op, b);
+        if (typeof result === "number") {
+            return Math.round(result * 100000000) / 100000000;
+        }
         return result;
     };
 
@@ -201,6 +204,20 @@ function displayOutput() {
 
         });
     })
+
+    document.addEventListener("keydown", (e) => {
+        const key = e.key;
+
+        if (/^[0-9]$/.test(key)) inputDigit(key);
+        else if (key === ".") inputDecimal();
+        else if (OPERATORS.has(key)) inputOperator(key);
+        else if (key === "Enter" || key === "=") inputEquals();
+        else if (key === "Backspace") inputBackspace();
+        else if (key.toLowerCase() === "c" || key === "Escape") clearCalculator();
+        else return;
+
+        updateDisplay();
+    });
 
 
 }
