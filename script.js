@@ -100,9 +100,6 @@ function operate(value1, operator, value2) {
     return "Error";
 }
 
-console.log()
-
-
 //Display
 function displayOutput() {
     const display = document.querySelector(".display");
@@ -168,7 +165,6 @@ function displayOutput() {
             return;
         }
         currentValue = currentValue.length > 1 ? currentValue.slice(0, -1) : "0";
-        console.log(currentValue);
     };
 
 
